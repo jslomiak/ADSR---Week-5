@@ -5,10 +5,11 @@
 </head>
 <body>
 
-    <button> ADSR </button>
+    <button id="btn-short">Short</button>
+    <button id="btn-long">Long</button>
 
     <script>
-        function playNote(someContext, frequency, duration)
+        function playNote(someContext, frequency, duration, attackTime)
         {
             const osc1 = new OscillatorNode(someContext);
             const osc2 = new OscillatorNode(someContext);
@@ -26,7 +27,7 @@
 
             let now = someContext.currentTime;
 
-            gain.gain.linearRampToValueAtTime(0.25, now + 0.05); //attack
+            gain.gain.linearRampToValueAtTime(0.10, now + attackTime); //attack
             gain.gain.linearRampToValueAtTime(0, now + duration); //release
 
             osc1.start();
@@ -38,9 +39,18 @@
         }
 
         const myCtx = new AudioContext();
-        let freq = 60
+        
+        // button 1
 
-        document.querySelector("button").onclick = () => playNote(myCtx, freq, 0.3);
+        document.querySelector("#btn-short").onclick = () => {
+            playNote(myCtx, 60, 0.3, 0.05);
+        };
+
+        // button 2
+
+        document.querySelector("#btn-long").onclick = () => {
+            playNote(myCtx, 90, 1.5, 0.6);
+        };
     </script>
     
 </body>
