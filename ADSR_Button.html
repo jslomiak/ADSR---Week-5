@@ -5,7 +5,7 @@
 </head>
 <body>
 
-    <button> Play</button>
+    <button> ADSR </button>
 
     <script>
         function playNote(someContext, frequency, duration)
@@ -16,9 +16,9 @@
         
             
             osc1.frequency.value = frequency;
-            osc2.frequency.value = frequency*2.01;
-            osc1.type = "triangle"
-            osc2.type = "triangle"
+            osc2.frequency.value = frequency*2.05;
+            osc1.type = "sine"
+            osc2.type = "sine"
             gain.gain.value = 0;
 
             osc1.connect(gain).connect(someContext.destination);
@@ -26,7 +26,7 @@
 
             let now = someContext.currentTime;
 
-            gain.gain.linearRampToValueAtTime(0.25, now + 0.01); //attack
+            gain.gain.linearRampToValueAtTime(0.25, now + 0.05); //attack
             gain.gain.linearRampToValueAtTime(0, now + duration); //release
 
             osc1.start();
@@ -38,9 +38,9 @@
         }
 
         const myCtx = new AudioContext();
-        let freq = 98
+        let freq = 60
 
-        document.querySelector("button").onclick = () => playNote(myCtx, freq, 0.5);
+        document.querySelector("button").onclick = () => playNote(myCtx, freq, 0.3);
     </script>
     
 </body>
