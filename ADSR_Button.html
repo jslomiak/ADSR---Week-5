@@ -11,6 +11,11 @@
     <script>
         function playNote(someContext, frequency, duration, attackTime)
         {
+
+            if (someContext.state === 'suspended') {
+                someContext.resume();
+            }
+
             const osc1 = new OscillatorNode(someContext);
             const osc2 = new OscillatorNode(someContext);
             const gain = new GainNode(someContext);
@@ -27,7 +32,8 @@
 
             let now = someContext.currentTime;
 
-            gain.gain.linearRampToValueAtTime(0.10, now + attackTime); //attack
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(0.50, now + attackTime); //attack
             gain.gain.linearRampToValueAtTime(0, now + duration); //release
 
             osc1.start();
@@ -43,14 +49,27 @@
         // button 1
 
         document.querySelector("#btn-short").onclick = () => {
-            playNote(myCtx, 60, 0.3, 0.05);
+            playNote(myCtx, 67, 0.3, 0.05);
         };
 
         // button 2
 
         document.querySelector("#btn-long").onclick = () => {
-            playNote(myCtx, 90, 1.5, 0.6);
+            playNote(myCtx, 77, 1.5, 0.6);
+        }; 
+
+        // in-class functions
+
+        const greet = function(name) {
+            console.log("Hello " + name + "!");
+
         };
+
+        greet("Alice");
+        greet("Bo");
+
+        //
+
     </script>
     
 </body>
