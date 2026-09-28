@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang = "en">
 <meta charset="UTF-8">
-<title>ADSR_Works</title>
+<title>ADSR</title>
 </head>
 <body>
 
-    <button id="btn-short">Short</button>
-    <button id="btn-long">Long</button>
+    <button id="button">Play Me!</button>
 
     <script>
         function playNote(someContext, frequency, duration, attackTime)
@@ -18,22 +17,28 @@
 
             const osc1 = new OscillatorNode(someContext);
             const osc2 = new OscillatorNode(someContext);
+            const osc3 = new OscillatorNode(someContext);
             const gain = new GainNode(someContext);
         
             
             osc1.frequency.value = frequency;
-            osc2.frequency.value = frequency*2.05;
-            osc1.type = "sine"
-            osc2.type = "sine"
+            osc2.frequency.value = frequency*2.01;
+            osc3.frequency.value = frequency*3.02;
+            osc1.type = "triangle"
+            osc2.type = "triangle"
+            osc3.type = "triangle"
             gain.gain.value = 0;
 
             osc1.connect(gain).connect(someContext.destination);
             osc2.connect(gain).connect(someContext.destination);
+            osc3.connect(gain).connect(someContext.destination);
 
             let now = someContext.currentTime;
 
             gain.gain.setValueAtTime(0, now);
-            gain.gain.linearRampToValueAtTime(0.50, now + attackTime); //attack
+            gain.gain.linearRampToValueAtTime(0.30, now + attackTime); //attack
+            gain.gain.linearRampToValueAtTime(0.10, now + 0.01 + 0.2); // decay
+            gain.gain.linearRampToValueAtTime(0.05, now + 0.01 + 0.2 + 0.2); //sustain
             gain.gain.linearRampToValueAtTime(0, now + duration); //release
 
             osc1.start();
@@ -42,33 +47,25 @@
             osc2.start();
             osc2.stop(now + duration);
 
+            osc3.start();
+            osc3.stop(now + duration);
+
+        }
+
+        const midiPitches = [69, 71, 73, 75, 76, 78, 80, 81];
+        const randomPitch = function() {
+            let randomMidiNote = midiPitches[Math.floor(Math.random() * midiPitches.length)];
+
+            let newFreq = 440 / 2 ** ((randomMidiNote - 69) / 12);
+
+            return newFreq;
         }
 
         const myCtx = new AudioContext();
-        
-        // button 1
 
-        document.querySelector("#btn-short").onclick = () => {
-            playNote(myCtx, 67, 0.3, 0.05);
+        document.querySelector("#button").onclick = () => {
+            playNote(myCtx, randomPitch(), 2, 0.25);
         };
-
-        // button 2
-
-        document.querySelector("#btn-long").onclick = () => {
-            playNote(myCtx, 77, 1.5, 0.6);
-        }; 
-
-        // in-class functions
-
-        const greet = function(name) {
-            console.log("Hello " + name + "!");
-
-        };
-
-        greet("Alice");
-        greet("Bo");
-
-        //
 
     </script>
     
