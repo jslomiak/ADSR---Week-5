@@ -24,9 +24,9 @@
             osc1.frequency.value = frequency;
             osc2.frequency.value = frequency*2.01;
             osc3.frequency.value = frequency*3.02;
-            osc1.type = "triangle"
-            osc2.type = "triangle"
-            osc3.type = "triangle"
+            osc1.type = "sawtooth"
+            osc2.type = "sawtooth"
+            osc3.type = "sawtooth"
             gain.gain.value = 0;
 
             osc1.connect(gain).connect(someContext.destination);
