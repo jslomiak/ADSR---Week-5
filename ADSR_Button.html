@@ -6,6 +6,8 @@
 <body>
 
     <button id="button">Play Me!</button>
+    
+    <h2 id= "note-display"></h2>
 
     <script>
         function playNote(someContext, frequency, duration, attackTime)
@@ -52,21 +54,33 @@
 
         }
 
-        const midiPitches = [69, 71, 73, 75, 76, 78, 80, 81];
-        const randomPitch = function() {
+        const midiPitches = [69, 71, 73, 75, 76, 78, 80, 81]
+
+        const noteNames = {69: "A4", 71: "B4", 73: "C#5", 75: "D#5", 76: "E5", 78: "F#5", 80: "G#5", 81: "A5"};
+
+        const randomPitchData = function() {
             let randomMidiNote = midiPitches[Math.floor(Math.random() * midiPitches.length)];
 
-            let newFreq = 440 / 2 ** ((randomMidiNote - 69) / 12);
+            let newFreq = 440 * (2 ** ((randomMidiNote - 69) / 12));
 
-            return newFreq;
+            return {
+            frequency: newFreq,
+            name: noteNames[randomMidiNote]
         }
+    }
 
         const myCtx = new AudioContext();
 
         document.querySelector("#button").onclick = () => {
-            playNote(myCtx, randomPitch(), 2, 0.25);
+            const noteData = randomPitchData();
+
+        document.querySelector("#note-display").textContent = `Playing Note: ${noteData.name}`;
+
+        playNote(myCtx, noteData.frequency, 2, 0.25);
+
         };
 
+        
     </script>
     
 </body>
